@@ -17,7 +17,6 @@
 - [Usage Guide](#usage-guide)
 - [Folder Structure](#folder-structure)
 - [Hackathon Track](#hackathon-track)
-- [Scoring Breakdown](#scoring-breakdown)
 - [Roadmap](#roadmap)
 - [License](#license)
 
@@ -151,7 +150,7 @@ API Docs: https://docs.li.fi/earn/overview
 
 | Layer | Technology |
 |---|---|
-| **Framework** | Next.js 14 (App Router) |
+| **Framework** | Next.js(App Router) |
 | **Language** | TypeScript |
 | **Styling** | Tailwind CSS |
 | **Charts** | Recharts |
@@ -175,7 +174,7 @@ API Docs: https://docs.li.fi/earn/overview
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/yield-ticker.git
+git clone https://github.com/teewa56/yield-ticker.git
 cd yield-ticker
 
 # Install dependencies
@@ -325,17 +324,6 @@ yield-ticker/
 Yield Ticker is a yield intelligence product that directly solves the fragmentation problem in DeFi yield. It integrates deeply with the LI.FI Earn API for vault discovery, real-time data, and one-click Composer execution.
 
 **Also eligible for: 🃏 Open Track** — the Bloomberg terminal concept applied to DeFi yield is a novel product category not covered by existing tools.
-
----
-
-## Scoring Breakdown
-
-| Criteria | Weight | How Yield Ticker Addresses It |
-|---|---|---|
-| **API Integration** | 35% | Deep use of LI.FI Earn — vault discovery, APY data, transaction feed, and Composer all integrated |
-| **Innovation** | 25% | First Bloomberg-style terminal for cross-chain DeFi yield with embedded execution |
-| **Product Completeness** | 20% | Fully functional — live data, filtering, whale alerts, deposit flow all working |
-| **Presentation** | 20% | Terminal aesthetic is visually striking and demo-ready for judges and Twitter |
 
 ---
 
