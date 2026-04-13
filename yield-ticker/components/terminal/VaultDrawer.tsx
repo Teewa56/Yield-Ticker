@@ -86,7 +86,7 @@ export function VaultDrawer() {
                     fontFamily: 'monospace',
                     color: '#22d3ee',
                   }}
-                  formatter={(v: number) => [`${v.toFixed(2)}%`, 'APY']}
+                  formatter={(v) => [`${Number(v).toFixed(2)}%`, 'APY']}
                   labelFormatter={() => ''}
                 />
                 <Line

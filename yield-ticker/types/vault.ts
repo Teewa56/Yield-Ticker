@@ -1,3 +1,5 @@
+import type { Chain } from './chain'
+
 export interface Vault {
   id: string
   name: string

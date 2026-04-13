@@ -1,18 +1,15 @@
-import { WagmiProvider, createConfig, http } from 'wagmi'
+'use client'
+
+import { WagmiProvider } from 'wagmi'
 import { mainnet, arbitrum, base, optimism } from 'wagmi/chains'
 import { RainbowKitProvider, getDefaultConfig } from '@rainbow-me/rainbowkit'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 const config = getDefaultConfig({
   appName: 'Yield Ticker',
-  projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID!,
+  projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || 'dummy-project-id',
   chains: [mainnet, arbitrum, base, optimism],
-  transports: {
-    [mainnet.id]: http(),
-    [arbitrum.id]: http(),
-    [base.id]: http(),
-    [optimism.id]: http(),
-  },
+  ssr: true,
 })
 
 const queryClient = new QueryClient()
