@@ -3,8 +3,13 @@ import type { NextConfig } from 'next'
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['raw.githubusercontent.com', 'icons.llamao.fi', 'assets.coingecko.com'],
+    remotePatterns: [
+      { protocol: 'https', hostname: 'raw.githubusercontent.com' },
+      { protocol: 'https', hostname: 'icons.llamao.fi' },
+      { protocol: 'https', hostname: 'assets.coingecko.com' },
+    ],
   },
+  turbopack: {},
   webpack: (config) => {
     config.externals.push('pino-pretty', 'lokijs', 'encoding')
     return config
