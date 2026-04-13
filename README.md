@@ -247,62 +247,59 @@ yield-ticker/
 │   ├── fonts/                        # Custom terminal fonts
 │   └── favicon.ico
 │
-├── src/
-│   ├── app/                          # Next.js App Router
-│   │   ├── layout.tsx                # Root layout (providers, fonts)
-│   │   ├── page.tsx                  # Main terminal page
-│   │   └── globals.css               # Global styles + CSS variables
+── app/                          # Next.js App Router
+│   ├── layout.tsx                # Root layout (providers, fonts)
+│   ├── page.tsx                  # Main terminal page
+│   └── globals.css               # Global styles + CSS variables
 │   │
-│   ├── components/
-│   │   ├── terminal/
-│   │   │   ├── TopBar.tsx            # Global stats bar
-│   │   │   ├── LiveFeed.tsx          # Scrolling deposit/withdrawal ticker
-│   │   │   ├── APYTable.tsx          # Vault list with momentum indicators
-│   │   │   ├── WhalePanel.tsx        # Large transaction alert feed
-│   │   │   ├── RotationMap.tsx       # Cross-chain capital heatmap
-│   │   │   └── VaultDrawer.tsx       # Vault detail side drawer
-│   │   │
-│   │   ├── composer/
-│   │   │   ├── ComposerWidget.tsx    # LI.FI one-click deposit widget
-│   │   │   └── DepositButton.tsx     # Deposit CTA on vault rows
-│   │   │
-│   │   ├── ui/
-│   │   │   ├── Badge.tsx             # Status / chain / protocol badges
-│   │   │   ├── MomentumIndicator.tsx # APY delta arrows + colors
-│   │   │   ├── WhaleBadge.tsx        # Whale flag component
-│   │   │   ├── ChainIcon.tsx         # Chain logo renderer
-│   │   │   └── ProtocolIcon.tsx      # Protocol logo renderer
-│   │   │
-│   │   └── layout/
-│   │       ├── Sidebar.tsx           # Watchlist + filter sidebar
-│   │       └── SettingsModal.tsx     # User preferences modal
+├── components/
+|   ├── terminal/
+|   │   ├── TopBar.tsx            # Global stats bar
+|   │   ├── LiveFeed.tsx          # Scrolling deposit/withdrawal ticker
+|   │   ├── APYTable.tsx          # Vault list with momentum indicators
+|   │   ├── WhalePanel.tsx        # Large transaction alert feed
+|   │   ├── RotationMap.tsx       # Cross-chain capital heatmap
+|   │   └── VaultDrawer.tsx       # Vault detail side drawer
+|   │
+├── composer/
+|   │   ├── ComposerWidget.tsx    # LI.FI one-click deposit widget
+|   │   └── DepositButton.tsx     # Deposit CTA on vault rows
+|   │
+├── ui/
+|   │   ├── Badge.tsx             # Status / chain / protocol badges
+|   │   ├── MomentumIndicator.tsx # APY delta arrows + colors
+|   │   ├── WhaleBadge.tsx        # Whale flag component
+|   │   ├── ChainIcon.tsx         # Chain logo renderer
+|   │   └── ProtocolIcon.tsx      # Protocol logo renderer
+|   │
+└── layout/
+|       ├── Sidebar.tsx           # Watchlist + filter sidebar
+|       └── SettingsModal.tsx     # User preferences modal
+├── hooks/
+|   ├── useVaults.ts              # Fetch + cache vault list from LI.FI
+|   ├── useLiveFeed.ts            # Poll live deposit/withdrawal events
+|   ├── useAPYMomentum.ts         # Compute APY delta over time windows
+|   ├── useWhaleDetector.ts       # Filter events by threshold
+|   └── useChainFlows.ts          # Aggregate net flows per chain
 │   │
-│   ├── hooks/
-│   │   ├── useVaults.ts              # Fetch + cache vault list from LI.FI
-│   │   ├── useLiveFeed.ts            # Poll live deposit/withdrawal events
-│   │   ├── useAPYMomentum.ts         # Compute APY delta over time windows
-│   │   ├── useWhaleDetector.ts       # Filter events by threshold
-│   │   └── useChainFlows.ts          # Aggregate net flows per chain
+├── lib/
+|   ├── lifi/
+|   │   ├── client.ts             # LI.FI Earn API client + typed fetchers
+|   │   ├── composer.ts           # Composer integration helpers
+|   │   └── types.ts              # LI.FI API response types
+|   │
+|   ├── signals/
+|   │   ├── apyDelta.ts           # APY momentum calculation logic
+|   │   ├── whaleFilter.ts        # Whale detection logic
+|   │   └── chainAggregator.ts    # Cross-chain flow aggregation
+|   │
+|   └── utils.ts                  # Shared helpers (formatting, math)
+├── store/
+|   ├── terminalStore.ts          # Zustand store for terminal state
+|   ├── watchlistStore.ts         # Persisted watchlist state
+|   └── settingsStore.ts          # User preferences state
 │   │
-│   ├── lib/
-│   │   ├── lifi/
-│   │   │   ├── client.ts             # LI.FI Earn API client + typed fetchers
-│   │   │   ├── composer.ts           # Composer integration helpers
-│   │   │   └── types.ts              # LI.FI API response types
-│   │   │
-│   │   ├── signals/
-│   │   │   ├── apyDelta.ts           # APY momentum calculation logic
-│   │   │   ├── whaleFilter.ts        # Whale detection logic
-│   │   │   └── chainAggregator.ts    # Cross-chain flow aggregation
-│   │   │
-│   │   └── utils.ts                  # Shared helpers (formatting, math)
-│   │
-│   ├── store/
-│   │   ├── terminalStore.ts          # Zustand store for terminal state
-│   │   ├── watchlistStore.ts         # Persisted watchlist state
-│   │   └── settingsStore.ts          # User preferences state
-│   │
-│   └── types/
+└── types/
 │       ├── vault.ts                  # Vault and event type definitions
 │       └── chain.ts                  # Chain type definitions
 │
