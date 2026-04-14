@@ -4,6 +4,9 @@ import type {
   LiFiVaultResponse,
   LiFiComposerQuote,
 } from './types'
+import { handleFetchError, logError } from '@/lib/errors/handlers'
+import { NetworkError } from '@/lib/errors/types'
+
 const API_URL = process.env.NEXT_PUBLIC_LIFI_API_URL || 'https://li.quest/v1'
 const API_KEY = process.env.NEXT_PUBLIC_LIFI_API_KEY || ''
 
@@ -11,24 +14,30 @@ async function fetchLiFi<T>(
   endpoint: string,
   params?: Record<string, string | number | boolean>
 ): Promise<T> {
-  const url = new URL(`${API_URL}${endpoint}`)
-  if (params) {
-    Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, String(v)))
+  try {
+    const url = new URL(`${API_URL}${endpoint}`)
+    if (params) {
+      Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, String(v)))
+    }
+
+    const res = await fetch(url.toString(), {
+      headers: {
+        'Content-Type': 'application/json',
+        ...(API_KEY && { 'x-lifi-api-key': API_KEY }),
+      },
+      next: { revalidate: 30 },
+    })
+
+    if (!res.ok) {
+      await handleFetchError(res)
+    }
+
+    const data = await res.json()
+    return data as T
+  } catch (error) {
+    logError(error, { endpoint })
+    throw error
   }
-
-  const res = await fetch(url.toString(), {
-    headers: {
-      'Content-Type': 'application/json',
-      ...(API_KEY && { 'x-lifi-api-key': API_KEY }),
-    },
-    next: { revalidate: 30 },
-  })
-
-  if (!res.ok) {
-    throw new Error(`LI.FI API error: ${res.status} ${res.statusText}`)
-  }
-
-  return res.json()
 }
 
 export async function getVaults(params?: {

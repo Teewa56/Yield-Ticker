@@ -1,4 +1,5 @@
 'use client'
+import { useState, useEffect } from 'react'
 import { useTerminalStore } from '@/store/terminalStore'
 import { formatUsd } from '@/lib/utils'
 
@@ -8,9 +9,19 @@ export function TopBar() {
   const eventCount = useTerminalStore(s => s.eventCount)
   const vaults = useTerminalStore(s => s.vaults)
 
-  const now = new Date()
-  const time = now.toLocaleTimeString('en-US', { hour12: false, timeZone: 'America/New_York' })
-  const date = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+  const [time, setTime] = useState('')
+  const [date, setDate] = useState('')
+
+  useEffect(() => {
+    const update = () => {
+      const now = new Date()
+      setTime(now.toLocaleTimeString('en-US', { hour12: false, timeZone: 'America/New_York' }))
+      setDate(now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }))
+    }
+    update()
+    const id = setInterval(update, 1000)
+    return () => clearInterval(id)
+  }, [])
 
   return (
     <div className="flex h-9 items-center justify-between border-b border-cyan-900/40 bg-terminal-surface/80 px-4 backdrop-blur-sm">

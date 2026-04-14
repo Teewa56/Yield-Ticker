@@ -9,6 +9,7 @@ import { computeAPYDelta } from '@/lib/signals/apyDelta'
 import { useTerminalStore } from '@/store/terminalStore'
 import { useFilterStore } from '@/store/terminalStore'
 import { CHAIN_CONFIG } from '@/types/chain'
+import { useErrorNotifier } from '@/lib/errors/hooks'
 
 function mapVault(raw: LiFiVaultResponse, index: number): Vault {
   const chainEntry = Object.values(CHAIN_CONFIG).find(c => c.id === raw.chainId)
@@ -44,6 +45,7 @@ function mapVault(raw: LiFiVaultResponse, index: number): Vault {
 
 export function useVaults() {
   const setVaults = useTerminalStore(s => s.setVaults)
+  const notifyError = useErrorNotifier()
 
   const query = useQuery({
     queryKey: ['vaults'],
@@ -54,6 +56,13 @@ export function useVaults() {
     staleTime: 30_000,
     refetchInterval: 60_000,
   })
+
+  // Handle query errors
+  useEffect(() => {
+    if (query.error) {
+      notifyError(query.error)
+    }
+  }, [query.error, notifyError])
 
   useEffect(() => {
     if (query.data) setVaults(query.data)
