@@ -14,30 +14,35 @@ import { useErrorNotifier } from '@/lib/errors/hooks'
 function mapVault(raw: LiFiVaultResponse, index: number): Vault {
   const chainEntry = Object.values(CHAIN_CONFIG).find(c => c.id === raw.chainId)
   const chainName = chainEntry?.name ?? 'ethereum'
-  const history = generateMockHistory(raw.apy, index)
-  const momentum = computeAPYDelta(raw.apy, history)
+  const tokenInfo = raw.underlyingTokens?.[0] ?? (typeof raw.token === 'object' ? raw.token : undefined)
+  const apyBase = raw.analytics?.apy?.base ?? 0
+  const apyReward = raw.analytics?.apy?.reward ?? 0
+  const apyTotal = raw.analytics?.apy?.total ?? apyBase + apyReward
+  const tvlUsd = Number(raw.analytics?.tvl?.usd ?? raw.tvlUsd ?? 0)
+  const history = generateMockHistory(apyTotal, index)
+  const momentum = computeAPYDelta(apyTotal, history)
 
   return {
-    id: raw.id,
+    id: raw.slug ?? raw.id ?? raw.address,
     name: raw.name,
-    protocol: raw.protocol,
+    protocol: typeof raw.protocol === 'string' ? raw.protocol : raw.protocol.name,
     chain: chainName,
     chainId: raw.chainId,
-    token: raw.token.symbol,
-    tokenAddress: raw.token.address,
-    apy: raw.apy,
-    apyBase: raw.apyBase,
-    apyReward: raw.apyReward,
-    tvl: raw.tvl,
-    tvlUsd: raw.tvlUsd,
+    token: tokenInfo?.symbol ?? 'UNKNOWN',
+    tokenAddress: tokenInfo?.address ?? raw.address,
+    apy: apyTotal,
+    apyBase,
+    apyReward,
+    tvl: tvlUsd,
+    tvlUsd,
     contractAddress: raw.address,
-    logoUri: raw.token.logoURI,
-    protocolLogoUri: raw.protocolLogoURI,
+    logoUri: tokenInfo?.logoURI,
+    protocolLogoUri: typeof raw.protocol === 'object' ? raw.protocol.logoURI : undefined,
     audited: raw.audited ?? false,
     auditUrl: raw.auditUrl,
-    launchDate: raw.createdAt,
+    launchDate: raw.createdAt ?? raw.syncedAt,
     category: 'lending',
-    riskLevel: raw.tvlUsd > 100_000_000 ? 'low' : raw.tvlUsd > 10_000_000 ? 'medium' : 'high',
+    riskLevel: tvlUsd > 100_000_000 ? 'low' : tvlUsd > 10_000_000 ? 'medium' : 'high',
     apyHistory: history,
     momentum,
   }
@@ -50,8 +55,8 @@ export function useVaults() {
   const query = useQuery({
     queryKey: ['vaults'],
     queryFn: async () => {
-      const res = await getVaults({ limit : 100 })
-      return (res.vaults ?? []).map(mapVault)
+      const res = await getVaults({ limit: 100 })
+      return (res.data ?? res.vaults ?? []).map(mapVault)
     },
     staleTime: 30_000,
     refetchInterval: 60_000,

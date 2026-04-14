@@ -7,8 +7,8 @@ import type {
 import { handleFetchError, logError } from '@/lib/errors/handlers'
 import { NetworkError } from '@/lib/errors/types'
 
-const API_URL = process.env.NEXT_PUBLIC_LIFI_API_URL!
-const API_KEY = process.env.NEXT_PUBLIC_LIFI_API_KEY!
+const API_URL = process.env.NEXT_PUBLIC_LIFI_API_URL ?? 'https://earn.li.fi'
+const API_KEY = process.env.NEXT_PUBLIC_LIFI_API_KEY
 
 async function fetchLiFi<T>(
   endpoint: string,
