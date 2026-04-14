@@ -7,8 +7,8 @@ import type {
 import { handleFetchError, logError } from '@/lib/errors/handlers'
 import { NetworkError } from '@/lib/errors/types'
 
-const API_URL = process.env.NEXT_PUBLIC_LIFI_API_URL || 'https://li.quest/v1'
-const API_KEY = process.env.NEXT_PUBLIC_LIFI_API_KEY || ''
+const API_URL = process.env.NEXT_PUBLIC_LIFI_API_URL!
+const API_KEY = process.env.NEXT_PUBLIC_LIFI_API_KEY!
 
 async function fetchLiFi<T>(
   endpoint: string,
@@ -45,17 +45,17 @@ export async function getVaults(params?: {
   token?: string
   protocol?: string
   page?: number
-  pageSize?: number
+  limit?: number
 }): Promise<LiFiVaultsListResponse> {
   
 
-  return fetchLiFi<LiFiVaultsListResponse>('/earn/vaults', params as Record<string, string | number | boolean>)
+  return fetchLiFi<LiFiVaultsListResponse>('/v1/earn/vaults', params as Record<string, string | number | boolean>)
 }
 
 export async function getVaultById(id: string): Promise<LiFiVaultResponse> {
   
 
-  return fetchLiFi<LiFiVaultResponse>(`/earn/vaults/${id}`)
+  return fetchLiFi<LiFiVaultResponse>(`/v1/earn/vaults/${id}`)
 }
 
 export async function getVaultEvents(params?: {

@@ -50,7 +50,7 @@ export function useVaults() {
   const query = useQuery({
     queryKey: ['vaults'],
     queryFn: async () => {
-      const res = await getVaults({ pageSize: 100 })
+      const res = await getVaults({ limit : 50 })
       return (res.vaults ?? []).map(mapVault)
     },
     staleTime: 30_000,
