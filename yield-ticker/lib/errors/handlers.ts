@@ -190,11 +190,7 @@ export function logError(error: unknown, context?: Record<string, any>): void {
   }
 
   if (process.env.NODE_ENV === 'development') {
-    console.error('[Error]', logData)
+    console.log('[Error]', logData)
   }
 
-  // TODO: Send to error tracking service (Sentry, DataDog, etc.)
-  // if (process.env.NEXT_PUBLIC_ERROR_TRACKING_ENABLED === 'true') {
-  //   errorTrackingService.captureException(appError, { extra: context })
-  // }
 }
